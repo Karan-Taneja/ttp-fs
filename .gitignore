@@ -1,0 +1,3 @@
+ttp-fs-backend/node_modules/*
+ttp-fs-frontend/node_modules/*
+.DS_Store
