@@ -1,3 +1,4 @@
 ttp-fs-backend/node_modules/*
+ttp-fs-backend/.env
 ttp-fs-frontend/node_modules/*
 .DS_Store
