@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS transactions CASCADE;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  name_ VARCHAR NOT NULL,
   email VARCHAR UNIQUE NOT NULL,
   funds NUMERIC DEFAULT 5000.00
 );
@@ -13,6 +12,7 @@ CREATE TABLE users (
 CREATE TABLE stocks (
   id SERIAL PRIMARY,
   symbol VARCHAR UNIQUE NOT NULL,
+  logo VARCHAR,
   open_price NUMERIC NOT NULL,
   updated TIMESTAMP NOT NULL
 );
@@ -41,5 +41,7 @@ CREATE TABLE transactions (
     REFERENCES stocks(id)
     ON DELETE CASCADE,
   quantity INT NOT NULL,
+  price_per_stock NUMERIC NOT NULL,
+  total_price NUMERIC NOT NULL,
   transaction_date TIMESTAMP NOT NULL
 );

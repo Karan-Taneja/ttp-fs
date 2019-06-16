@@ -1,5 +1,5 @@
 const CronJob = require('cron').CronJob;
-const StockService = require('./events');
+const StockService = require('./stocks');
 
 const job = new CronJob('00 45 09 * * *', () => {
     StockService.updateAllStocks()
