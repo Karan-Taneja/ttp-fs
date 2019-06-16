@@ -12,6 +12,10 @@ CREATE TABLE users (
 CREATE TABLE stocks (
   id SERIAL PRIMARY,
   symbol VARCHAR UNIQUE NOT NULL,
+  stock_type VARCHAR,
+  company VARCHAR NOT NULL,
+  currency VARCHAR NOT NULL,
+  region VARCHAR NOT NULL,
   logo VARCHAR,
   open_price NUMERIC NOT NULL,
   updated TIMESTAMP NOT NULL
