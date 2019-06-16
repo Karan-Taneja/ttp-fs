@@ -9,18 +9,7 @@ StockService.getOpeningStockPrice = (symbol) => {
   symbol = encodeURI(symbol);
   return axios.get(`${baseUrl}/stock/${symbol}/ohlc?token=${key}`)
     .then(res => {
-      return res.open.price;
-    })
-    .catch(err => {
-      console.log(err);
-    });
-};
-
-StockService.getStockLogo = (symbol) => {
-  symbol = encodeURI(symbol);
-  return axios.get(`${baseUrl}/stock/${symbol}/logo?token=${key}`)
-    .then(res => {
-      return res.url;
+      return res.data.open.price;
     })
     .catch(err => {
       console.log(err);
@@ -49,18 +38,24 @@ StockService.updateAllStocks = async () => {
 
 StockService.populateStocks = () => {
   return axios.get(`${baseUrl}/ref-data/symbols?token=${key}`)
-    .then(async stocks => {
+    .then(async res => {
+      const stocks = res.data;
       for(let stock of stocks){
         let { symbol, type, name, currency, region } = stock;
-        symbol = encodeURI(stock.symbol);
+        if(!symbol || !type || !name || !currency || !region) continue;
+        s = encodeURI(symbol);
         const now = new Date();
-        const logo = await axios.get(`${baseUrl}/stock/${symbol}/logo?token=${key}`);
-        const open_price = await StockService.getOpeningStockPrice(symbol);
+        const logo_res = await axios.get(`${baseUrl}/stock/${s}/logo?token=${key}`);
+        const logo = logo_res.data.url;
+        if(!logo) continue;
+        const open_price_res = await axios.get(`${baseUrl}/stock/${s}/ohlc?token=${key}`);
+        const open_price = open_price_res.data.open.price;
+        if(!open_price) continue;
         const sql = `INSERT INTO stocks (symbol, stock_type, company, currency, region, logo, open_price, updated) 
         VALUES ($[symbol], $[type], $[name], $[currency], $[region], $[logo], $[open_price], $[now]) RETURNING id`;
         const id = await db.any(sql, { symbol, type, name, currency, region, logo, open_price, now });
         console.log(id);
-      }
+      };
     })
     .catch(err => {
       console.log(err);
