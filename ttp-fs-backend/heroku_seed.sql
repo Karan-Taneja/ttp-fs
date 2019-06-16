@@ -10,7 +10,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE stocks (
-  id SERIAL PRIMARY,
+  id SERIAL PRIMARY KEY,
   symbol VARCHAR UNIQUE NOT NULL,
   stock_type VARCHAR,
   company VARCHAR NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE stocks (
 );
 
 CREATE TABLE portfolios (
-  id SERIAL PRIMARY KEY
+  id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
     FOREIGN KEY (user_id)
     REFERENCES users(id)
@@ -31,7 +31,7 @@ CREATE TABLE portfolios (
     FOREIGN KEY (stock_id)
     REFERENCES stocks(id)
     ON DELETE CASCADE,
-  quantity INT NOT NULL,
+  quantity INT NOT NULL
 );
 
 CREATE TABLE transactions (

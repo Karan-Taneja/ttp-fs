@@ -1,4 +1,5 @@
 const db = require('./db');
+const axios = require('axios');
 const StockService = {};
 const baseUrl = 'https://cloud.iexapis.com/stable';
 const key = process.env.IEX_API_KEY
