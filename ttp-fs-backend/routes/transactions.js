@@ -2,8 +2,8 @@ const express = require('express');
 const TransactionService = require('../services/transactions');
 const transactionRouter = express.Router();
 
-transactionRouter.post('/:user_id', (req, res, next) => {
-  const { user_id } = req.params;
+transactionRouter.post('/', (req, res, next) => {
+  const { user_id } = req.query;
   const { stock_id, quantity, price_per_stock } = req.body;
   TransactionService.addTransaction(user_id, stock_id, quantity, price_per_stock)
     .then(transaction => {
@@ -14,8 +14,8 @@ transactionRouter.post('/:user_id', (req, res, next) => {
     });
 })
 
-transactionRouter.get('/:user_id', (req, res, next) => {
-  const { user_id } = req.params;
+transactionRouter.get('/', (req, res, next) => {
+  const { user_id } = req.query;
   TransactionService.viewUsersTransactions(user_id)
     .then(transactions => {
       res.json({'transactions': transactions});

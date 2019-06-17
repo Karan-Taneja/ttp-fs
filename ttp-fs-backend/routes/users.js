@@ -13,8 +13,9 @@ userRouter.post('/', (req, res, next) => {
     });
 });
 
-userRouter.get('/:email', (req, res, next) => {
-  const { email } = req.params;
+userRouter.get('/', (req, res, next) => {
+  const { email } = req.query;
+  console.log(email)
   UserService.getUserByEmail(email)
     .then(user => {
       res.json({'user': user});
@@ -24,8 +25,8 @@ userRouter.get('/:email', (req, res, next) => {
     });
 });
 
-userRouter.put('/:email', (req, res, next) => {
-  const { email } = req.params;
+userRouter.put('/', (req, res, next) => {
+  const { email } = req.query;
   const { funds } = req.body;
   UserService.updateUserFunds(email, funds)
   .then(user => {

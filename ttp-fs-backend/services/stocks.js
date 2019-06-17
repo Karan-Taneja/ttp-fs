@@ -39,9 +39,17 @@ StockService.updateAllStocks = async () => {
 StockService.populateStocks = () => {
   return axios.get(`${baseUrl}/ref-data/symbols?token=${key}`)
     .then(async res => {
+      const vals = {};
+      const existing = await db.any('SELECT symbol FROM stocks');
+      for(let i = 0; i < existing.length; i++){
+        const curr = existing[i].symbol
+        vals[curr] = curr;
+      };
       const stocks = res.data;
       for(let stock of stocks){
         let { symbol, type, name, currency, region } = stock;
+        if(vals[symbol]) continue;
+        vals[symbol] = symbol;
         if(!symbol || !type || !name || !currency || !region) continue;
         s = encodeURI(symbol);
         const now = new Date();
@@ -61,3 +69,4 @@ StockService.populateStocks = () => {
       console.log(err);
     });
 }
+

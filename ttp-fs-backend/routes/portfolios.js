@@ -24,8 +24,8 @@ portfolioRouter.put('/', (req, res, next) => {
   });
 });
 
-portfolioRouter.get('/:user_id', (req, res, next) => {
-  const { user_id } = req.params;
+portfolioRouter.get('/', (req, res, next) => {
+  const { user_id } = req.query;
   PortfolioService.viewUserPortfolio(user_id)
     .then(portfolio => {
       res.json({'portfolio': portfolio});
