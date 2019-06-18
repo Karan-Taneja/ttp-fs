@@ -4,6 +4,7 @@ const userRouter = express.Router();
 
 userRouter.post('/', (req, res, next) => {
   const { email } = req.body;
+  console.log('email: ', email)
   UserService.addUser(email)
     .then(user => {
       res.json({'user': user});
@@ -15,7 +16,7 @@ userRouter.post('/', (req, res, next) => {
 
 userRouter.get('/', (req, res, next) => {
   const { email } = req.query;
-  console.log(email)
+  console.log('email: ', email)
   UserService.getUserByEmail(email)
     .then(user => {
       res.json({'user': user});

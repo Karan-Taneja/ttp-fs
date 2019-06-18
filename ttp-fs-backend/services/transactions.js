@@ -7,7 +7,7 @@ TransactionService.addTransaction = (user_id, stock_id, quantity, price_per_stoc
   const total = quantity * price_per_stock;
   const sql = `INSERT INTO transactions (user_id, stock_id, quantity, price_per_stock, total_price, transaction_date)
    VALUES ($[user_id], $[stock_id], $[quantity], $[price_per_stock], $[total], $[now]) RETURNING *`;
-  return db.any(sql, { user_id, stock_id, quantity, price_per_stock, total, now });
+  return db.one(sql, { user_id, stock_id, quantity, price_per_stock, total, now });
 };
 
-TransactionService.viewUsersTransactions = (user_id) => db.any('SELECT * FROM transactions WHERE user_id = $[user_id]', { user_id });
+TransactionService.viewUsersTransactions = (user_id) => db.one('SELECT * FROM transactions WHERE user_id = $[user_id]', { user_id });
