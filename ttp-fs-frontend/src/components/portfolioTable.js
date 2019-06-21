@@ -23,25 +23,37 @@ export default (props) =>  {
           const curr = e.quantity * e.price;
           const start = e.quantity * e.open_price;
           const value = format.returnFormatted(e.currency, (e.quantity * e.price));
-          const bg = i+1 % 2 === 0 ? 'even' : 'odd'
+          const bg = (i+1) % 2 === 0 ? 'even' : 'odd'
           const color = curr > start ? 'profit' : curr === start ? '' : 'loss';
           const op = color === 'profit' ? '+' : color === 'loss' ? '-' : '';
-          const difference = `${op}${((1 - curr/start) * 100).toFixed(2)}%`;
-          return (
+          const val = curr > start ? (1 - start/curr) : (1 - curr/start)
+          const difference = `${op}${(val * 100).toFixed(2)}%`;
+          
+          let row = (
           <div className='stock-row row col-12 justify-content-center flex-nowrap' key={i}>
-            <div className={`${bg} stock-column number col-1 text-left align-middle py-2`}>{i+1}</div>
+            {
+              i === portfolio.length - 1 ?
+              <div className={`${bg} stock-column number col-1 text-left align-middle bblr py-2`}>{i+1}</div>
+              :
+              <div className={`${bg} stock-column number col-1 text-left align-middle py-2`}>{i+1}</div>
+            }
             <div className={`${bg} stock-column symbol col-2 text-left align-middle py-2`}>{e.symbol}</div>
             <div className={`${bg} stock-column company col-3 text-left align-middle py-2`}>{e.company}</div>
             <div className={`${bg} stock-column quantity col-3 text-left align-middle py-2`}>{e.quantity}</div>
-            <div className={`${bg} stock-column value col-3 text-left align-middle py-2 ${color}`}>{value} ({difference})</div>
-          </div>
-          )
+            {
+              i === portfolio.length - 1 ?
+              <div className={`${bg} stock-column value col-3 text-left align-middle bbrr py-2 ${color}`}>{value} ({difference})</div>
+              :
+              <div className={`${bg} stock-column value col-3 text-left align-middle py-2 ${color}`}>{value} ({difference})</div>
+            }
+          </div>);
+          return row;
         }) }
       </div>
       </>
       )
       :
-      <div className="row col-10">You have no stocks</div>
+      <div className="alert alert-light row col-12">You have no stocks</div>
     }
   </>)
 };

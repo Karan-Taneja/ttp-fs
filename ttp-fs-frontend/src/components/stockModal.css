@@ -12,11 +12,11 @@
 
 .modalBox{
   background-color: #FFF;
-  width: 50%;
-  height: 50%;
+  width: 60%;
+  height: 75%;
   position: absolute;
-  top: 25%;
-  left: 25%;
+  top: 20%;
+  left: 20%;
   z-index: 99;
   border-radius: 1rem;
 }
