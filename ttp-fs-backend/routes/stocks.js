@@ -5,7 +5,18 @@ const stockRouter = express.Router();
 stockRouter.get('/alldata', (req, res, next) => {
   StockService.getAllStockData()
     .then(stocks => {
-      res.json({'stocks': stocks});
+      const stockList = {};
+      for(let stock of stocks){
+        console.log(stock)
+        stockList[stock.symbol] = {
+          'company': stock.company,
+          'open_price': stock.open_price,
+          'stock_type': stock.stock_type,
+          'currency': stock.currency,
+          'region': stock.region,
+        };
+      };
+      res.json({'stocks': stockList});
     })
     .catch(err => {
       res.status(404).json({'err': err});
@@ -15,17 +26,24 @@ stockRouter.get('/alldata', (req, res, next) => {
 stockRouter.get('/all', (req, res, next) => {
   StockService.getAllStocks()
     .then(stocks => {
-      res.json({'stocks': stocks});
+      const symbolList = {};
+      for(let stock of stocks){
+        console.log(stock)
+        symbolList[stock.symbol] = {
+          'company': stock.company
+        };
+      };
+      res.json({'stocks': symbolList});
     })
     .catch(err => {
       res.status(404).json({'err': err});
     });
 });
 
-stockRouter.get('/update', (res, res, next) => {
+stockRouter.get('/update', (req, res, next) => {
   StockService.updateAllStocks()
-    .then(() => {
-      res.json({'success': true});
+    .then(stocks => {
+      res.json({'stocks': stocks});
     })
     .catch(err => {
       res.status(404).json({'err': err});
