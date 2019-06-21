@@ -25,6 +25,16 @@
   color: rgb(49, 152, 247)
 }
 
+.form-control.inputField{
+  border: none;
+  border-bottom: 2px solid #64676D;
+  border-radius: 0px;
+}
+
+.prices{
+  padding: .375rem .75rem;
+}
+
 .stock-drop{
   width: 100%;
   color: #000;

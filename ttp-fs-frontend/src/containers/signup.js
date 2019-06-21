@@ -32,8 +32,8 @@ export default class Signup extends React.Component {
           });
         })
         .catch(err => {
-          const { message } = err;
-          if(message = "The email address is badly formatted.") message = "Invalid email address.";
+          let { message } = err;
+          if(message === "The email address is badly formatted.") message = "Invalid email address.";
           this.setState({ error: message });
         });
     }
@@ -85,8 +85,9 @@ export default class Signup extends React.Component {
     return (
       <AuthContext.Consumer>
         {
-          (user) => {
-            if (user) {
+          (context) => {
+            if (context.user) {
+              console.log(context.user);
               return <Redirect to='/' />;
             } else {
               return displayForm;

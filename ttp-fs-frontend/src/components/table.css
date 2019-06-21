@@ -44,6 +44,14 @@
   color: #1B1E22;
 }
 
+.profit{
+  color: green;
+}
+
+.loss{
+  color: red;
+}
+
 .even{
   background-color: #FFFFFF;
 }

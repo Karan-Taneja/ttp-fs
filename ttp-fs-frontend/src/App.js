@@ -16,7 +16,6 @@ import Transactions from './containers/transactions';
 import Navbar from './components/navbar';
 import Error404 from './components/error404';
 import Loading from './components/loading';
-import StockModal from './components/stockModal';
 
 // ---- Contexts
 import AuthContext from './contexts/auth';
@@ -41,9 +40,10 @@ export default class App extends Component {
         try {
           const res = await axios.get(`http://arbiter-stocks.herokuapp.com/users/?email=${user.email}`);
           user.id = res.data.user.id;
+          user.funds = res.data.user.funds;
           appCache.setItem('user', user);
-          await this.setState({user, loading: false})
-          if(this.state.stocks.updated * 1 - Date.now() > 43200000){
+          this.setState({user, loading: false})
+          if(!this.state.stock || Date.now() - this.state.stocks.updated * 1 > 43200000){
             const stockRes = await axios.get(`http://arbiter-stocks.herokuapp.com/stocks/alldata`);
             const stocks = stockRes.data.stocks;
             stocks.update = Date.now()
@@ -62,6 +62,10 @@ export default class App extends Component {
     });
   };
 
+  updateContext = (user) => {
+    this.setState({user});
+  };
+
   componentWillUnmount() {
     appCache.removeItem('user');
     this.unsubscribe();
@@ -69,10 +73,9 @@ export default class App extends Component {
 
   render() {
     return (<>
-      {/* <StockModal /> */}
       {
       <HashRouter>
-        <AuthContext.Provider value={ this.state.user }>
+        <AuthContext.Provider value={{user: this.state.user, update: this.updateContext}}>
           <Route path='/' component={ Navbar } />
           { this.state.loading ?
             <div className="container mt-5">

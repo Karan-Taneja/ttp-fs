@@ -10,12 +10,12 @@ import appCache from '../scripts/cache';
 
 export default class Logout extends React.Component {
   componentDidMount() {
-    console.log('mounted');
     firebase.auth().signOut();
     appCache.removeItem('user');
+    appCache.removeItem('portfolio')
   };
   render() {
     const user = appCache.getItem('user');
-    return user ? <Loading /> : <Redirect to="/" />
-  };
+    return user ? <Loading /> : <Redirect to="/login" />
+  }
 };

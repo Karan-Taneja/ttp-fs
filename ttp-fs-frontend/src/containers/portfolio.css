@@ -5,6 +5,7 @@
 }
 
 .buy{
+  background-color: #EBEBEB;
   border-radius: 100%;
 }
 
@@ -22,7 +23,7 @@
 
 .pos-bottom-right{
   bottom: 1rem;
-  right: 30px;
+  right: 2rem;
 }
 
 .ripple {

@@ -8,14 +8,13 @@ import TransactionTable from '../components/transactionTable';
 import Loading from '../components/loading';
 
 // ---- Scripts
-import appCache from '../scripts/cache';
 
 export default class Transactions extends React.Component {
   
   static contextType = AuthContext;
   
   state = { 
-    user: this.context,
+    user: this.context.user,
     transactions: [],
     loading: true,
   };
@@ -51,12 +50,12 @@ export default class Transactions extends React.Component {
   };
 
   render() {
-    const { user, transactions, loading } = this.state;
+    const { transactions, loading } = this.state;
     return (
       <AuthContext.Consumer>
         {
-          user => {
-            if(user){
+          context => {
+            if(context.user){
               if(loading) return <Loading />
               else return (<div className="transactions">
                 <TransactionTable transactions={transactions}/>

@@ -2,7 +2,7 @@ import React from 'react';
 import './table.css';
 
 // ---- Scripts
-import format from '../scripts/format'
+import format from '../scripts/format';
 
 export default (props) =>  { 
   const { portfolio } = props;
@@ -20,15 +20,20 @@ export default (props) =>  {
         </div>
         { 
           portfolio.map((e, i) => {
-          const value = format.returnFormatted(e.currency, (e.quantity * e.open_price));
+          const curr = e.quantity * e.price;
+          const start = e.quantity * e.open_price;
+          const value = format.returnFormatted(e.currency, (e.quantity * e.price));
           const bg = i+1 % 2 === 0 ? 'even' : 'odd'
+          const color = curr > start ? 'profit' : curr === start ? '' : 'loss';
+          const op = color === 'profit' ? '+' : color === 'loss' ? '-' : '';
+          const difference = `${op}${((1 - curr/start) * 100).toFixed(2)}%`;
           return (
           <div className='stock-row row col-12 justify-content-center flex-nowrap' key={i}>
             <div className={`${bg} stock-column number col-1 text-left align-middle py-2`}>{i+1}</div>
             <div className={`${bg} stock-column symbol col-2 text-left align-middle py-2`}>{e.symbol}</div>
             <div className={`${bg} stock-column company col-3 text-left align-middle py-2`}>{e.company}</div>
             <div className={`${bg} stock-column quantity col-3 text-left align-middle py-2`}>{e.quantity}</div>
-            <div className={`${bg} stock-column value col-3 text-left align-middle py-2`}>{value}</div>
+            <div className={`${bg} stock-column value col-3 text-left align-middle py-2 ${color}`}>{value} ({difference})</div>
           </div>
           )
         }) }

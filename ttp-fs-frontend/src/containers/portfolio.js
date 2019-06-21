@@ -1,5 +1,4 @@
 import React from 'react';
-import AuthContext from '../contexts/auth';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,11 +7,15 @@ import PortfolioTable from '../components/portfolioTable';
 import Loading from '../components/loading';
 import StockModal from '../components/stockModal';
 
+// ---- Contexts
+import AuthContext from '../contexts/auth';
+
 // ---- Assets
 import AddButton from '../assets/add_button.svg';
 
 // ---- Scripts
 import appCache from '../scripts/cache';
+import iexReqs from '../scripts/iex';
 
 // ---- CSS
 import './portfolio.css';
@@ -22,16 +25,20 @@ export default class Portfolio extends React.Component {
   static contextType = AuthContext;
   
   state = { 
-    user: this.context,
-    portfolio: [],
+    user: this.context.user,
+    portfolio: appCache.getItem('portfolio') || [],
     displayModal: false,
     loading: true,
   };
 
   componentDidMount() {
-    const user = this.state.user;
+    const { user, portfolio } = this.state;
     if(user !== null){
-      this.getUserPortfolio(user.id);
+      if(!portfolio.length || 
+         Date.now() - portfolio.updated * 1 > 60000 ||
+         !portfolio.update){
+        this.getUserPortfolio(user.id);
+      };
     }
     else{
       this.setState({loading: false});
@@ -49,14 +56,18 @@ export default class Portfolio extends React.Component {
       const res = await axios.get(`http://arbiter-stocks.herokuapp.com/portfolios/?user_id=${user_id}`)
       const { portfolio } = res.data;
       if(portfolio.length > 0){
-        for(let i = 0; i < portfolio.length; i++){
-          const nextRes = await axios.get(`http://arbiter-stocks.herokuapp.com/stocks/id/${portfolio[i].stock_id}`)
+        for(let item of portfolio){
+          const nextRes = await axios.get(`http://arbiter-stocks.herokuapp.com/stocks/id/${item.stock_id}`)
           let { stock } = nextRes.data;
-          portfolio[i].symbol = stock.symbol;
-          portfolio[i].company = stock.company;
-          portfolio[i].currency = stock.currency;
-          portfolio[i].open_price = stock.open_price;
-        }
+          const price = await iexReqs.getStockPrice(stock.symbol);
+          item.symbol = stock.symbol;
+          item.company = stock.company;
+          item.currency = stock.currency;
+          item.open_price = stock.open_price;
+          item.price = price.data;
+        };
+        portfolio.updated = Date.now();
+        appCache.setItem('portfolio', portfolio);
         this.setState({ portfolio: portfolio, loading: false });
       };
     }
@@ -66,16 +77,16 @@ export default class Portfolio extends React.Component {
   };
 
   render() {
-    const { user, portfolio, displayModal, loading } = this.state;
+    const { portfolio, displayModal, loading } = this.state;
     return (
       <AuthContext.Consumer>
         {
-          user => {
-            if(user){
+          context => {
+            if(context.user){
               if(loading) return <Loading />
               else return (<>
                 {
-                  displayModal ? <StockModal toggle={this.toggleModal}/> : <></>
+                  displayModal ? <StockModal toggle={this.toggleModal} portfolio={portfolio}/> : <></>
                 }
                 <div className="portfolio position-relative">
                   <PortfolioTable portfolio={portfolio} />
