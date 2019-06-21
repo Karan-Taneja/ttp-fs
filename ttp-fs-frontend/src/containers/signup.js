@@ -4,6 +4,9 @@ import axios from 'axios';
 import AuthContext from '../contexts/auth';
 import { Link, Redirect } from 'react-router-dom'
 
+// ---- CSS
+import './form.css';
+
 export default class Signup extends React.Component {
 
   state = {
@@ -24,37 +27,38 @@ export default class Signup extends React.Component {
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(async (response) => {
           console.log('Returns: ', response);
-          const user = response.user
           axios.post(`http://arbiter-stocks.herokuapp.com/users/`, {
             email: `${email}`
-          })
-          .then(res => {
-            console.log(res);
-          })
+          });
         })
         .catch(err => {
           const { message } = err;
+          if(message = "The email address is badly formatted.") message = "Invalid email address.";
           this.setState({ error: message });
         });
     }
     else{
-      this.setState({ error: 'passwords do not match'});
+      this.setState({ error: 'The passwords do not match.'});
     };
   };
 
   render() {
     const { email, password, confirm, error } = this.state;
-  const displayError = error === '' ? <div style={{height: '3em'}}></div> : 
-    <div className="d-flex justify-content-center mb-0">
-      <div className="alert alert-danger col-sm-12 col-md-6" role="alert">
+    
+    const displayError = error === '' ? 
+    <div style={{height: '4em'}}></div> 
+    : 
+    (<div className="d-flex justify-content-center mx-n3" style={{height: '4em', marginBottom: 'none'}}>
+      <div className="alert alert-danger col-12 text-center" role="alert">
         {error}
       </div>
-    </div>;
-    const displayForm = <div style={{width: '100%'}} className="d-flex flex-wrap justify-content-center align-items-center">
+    </div>);
+
+    const displayForm = <div className="d-flex flex-wrap justify-content-center align-items-center">
       <div className="col-12">
-        <h1 className="col-12 text-center">Sign Up</h1>
-        {displayError}
-        <form style={{margin: '0 auto'}} className="border rounded col-sm-12 col-md-6 px-3 py-4">
+        <form style={{margin: '0 auto'}} className="formBox col-sm-12 col-md-6 py-4 px-3">
+          <h1 className="col-12 formHeader text-center">Sign Up</h1>
+          {displayError}
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Email</label>
             <input type="email" className="form-control" aria-describedby="emailHelp" placeholder="Email" name="email" value={email} onChange={this.handleChange} />

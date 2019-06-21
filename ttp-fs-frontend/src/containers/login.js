@@ -3,6 +3,9 @@ import firebase from '../firebase';
 import AuthContext from '../contexts/auth';
 import { Redirect, Link } from 'react-router-dom'
 
+// ---- CSS
+import './form.css';
+
 export default class Login extends React.Component {
 
   state = {
@@ -12,6 +15,7 @@ export default class Login extends React.Component {
   };
 
   handleChange = (e) => {
+    console.log(e.target.value)
     this.setState({[e.target.name]: e.target.value});
   };
 
@@ -23,19 +27,25 @@ export default class Login extends React.Component {
         console.log('Returns: ', response);
       })
       .catch(err => {
-        const {message} = err;
+        let { message } = err;
+        if(message = "The email address is badly formatted.") message = "Invalid email address.";
         this.setState({error: message});
       });
   };
 
   render() {
     const { email, password, error } = this.state;
-    const displayError = error === '' ? '' : <div className="alert alert-danger" role="alert">{error}</div>;
-    const displayForm =  <div style={{width: '100%'}} className="d-flex flex-wrap justify-content-center align-items-center">
+    const displayError = error === '' ? <div style={{height: '4em'}}></div> : 
+    <div className="d-flex justify-content-center mx-n3" style={{height: '4em', marginBottom: 'none'}}>
+      <div className="alert alert-danger col-12 text-center" role="alert">
+        {error}
+      </div>
+    </div>;
+    const displayForm =  <div className="d-flex flex-wrap justify-content-center align-items-center">
       <div className="col-12">
-        <h1 className="col-12 text-center">Login</h1>
-        {displayError}
-        <form style={{margin: '0 auto'}} className="border rounded col-sm-12 col-md-6 mt-3 px-3 py-4">
+        <form style={{margin: '0 auto'}} className="formBox col-sm-12 col-md-6 px-3 py-4">
+          <h1 className="col-12 formHeader text-center">Login</h1>
+          {displayError}
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Email</label>
             <input type="email" className="form-control" aria-describedby="emailHelp" placeholder="Email" name="email" value={email} onChange={this.handleChange} />
