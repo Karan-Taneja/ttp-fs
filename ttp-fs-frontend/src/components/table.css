@@ -1,0 +1,53 @@
+.table{
+  font-family: 'Roboto', sans-serif;
+}
+
+.portfolio .name-column.value{
+  border-top-right-radius: 1rem;
+}
+
+.portfolio .stock-column.value:last-child{
+  border-bottom-right-radius: 1rem;
+}
+
+.portfolio .stock-column.number:nth-last-of-type(5){
+  border-bottom-left-radius: 1rem;
+}
+
+.transactions .name-column.date{
+  border-top-right-radius: 1rem;
+}
+
+.transactions .stock-column.number:nth-last-of-type(7){
+  border-bottom-left-radius: 1rem;
+}
+
+.transactions .stock-column.date:last-child{
+  border-bottom-right-radius: 1rem;
+}
+
+.name-column{
+  background-color: #1B1F23;
+  color: #FFF;
+  border-bottom: 3px solid #64676D;
+}
+
+.name-column.number{
+  border-top-left-radius: 1rem;
+}
+
+.stock-row{
+  color: gray;
+}
+
+.stock-row:hover{
+  color: #1B1E22;
+}
+
+.even{
+  background-color: #FFFFFF;
+}
+
+.odd{
+  background-color: #EBEBEB;
+}
