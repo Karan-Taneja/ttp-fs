@@ -69,7 +69,8 @@ export default class Portfolio extends React.Component {
         portfolio.updated = Date.now();
         appCache.setItem('portfolio', portfolio);
         this.setState({ portfolio: portfolio, loading: false });
-      };
+      }
+      else this.setState({ portfolio: [], loading: false});
     }
     catch (err) {
       console.log('err', err);
