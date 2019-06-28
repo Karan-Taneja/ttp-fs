@@ -18,9 +18,9 @@ import Close from '../assets/close.svg';
 import Back from '../assets/arrow_back.svg';
 
 // ---- CSS
-import './stockModal.css';
+import './purchaseModal.css';
 
-class StockModal extends Component {
+class PurchaseModal extends Component {
   
   static contextType = AuthContext;
 
@@ -150,6 +150,7 @@ class StockModal extends Component {
             'stock_id': stocks[symbol].id,
             'quantity': quantity,
             'price_per_stock': price,
+            'transaction_type': 'buy',
           });
           if(owned){
             const sum = quantity+equity;
@@ -324,4 +325,4 @@ class StockModal extends Component {
   };
 };
 
-export default StockModal;
+export default PurchaseModal;
